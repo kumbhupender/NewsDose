@@ -1,62 +1,8 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
-
+import Spinner from './Spinner';
 export class News extends Component {
 
-  articles = [
-      {
-          "source": {
-              "id": "news-com-au",
-              "name": "News.com.au"
-          },
-          "author": "Jai Bednall",
-          "title": "KP lays into England players in new twist",
-          "description": "Kevin Pietersen has unloaded on the England cricket team in the wake of the Second Test and the Jonny Bairstow controversy.",
-          "url": "https://www.news.com.au/sport/cricket/kevin-pietersen-squares-off-with-england-players-in-new-ashes-twist/news-story/39b3de9fba1278b268a2d9a57d9c9c02",
-          "urlToImage": "https://content.api.news/v3/images/bin/a58acaf0cd1435985f76a92887bdb82f",
-          "publishedAt": "2023-07-04T16:58:00Z",
-          "content": "Kevin Pietersen has unloaded on the England cricket team in the wake of the Second Test and the Jonny Bairstow controversy.\r\nPietersen hasn’t been shy about offering his opinion during the Ashes seri… [+3171 chars]"
-      },
-      {
-          "source": {
-              "id": "espn-cric-info",
-              "name": "ESPN Cric Info"
-          },
-          "author": null,
-          "title": "PCB hands Umar Akmal three-year ban from all cricket | ESPNcricinfo.com",
-          "description": "Penalty after the batsman pleaded guilty to not reporting corrupt approaches | ESPNcricinfo.com",
-          "url": "http://www.espncricinfo.com/story/_/id/29103103/pcb-hands-umar-akmal-three-year-ban-all-cricket",
-          "urlToImage": "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1099495_800x450.jpg",
-          "publishedAt": "2020-04-27T11:41:47Z",
-          "content": "Umar Akmal's troubled cricket career has hit its biggest roadblock yet, with the PCB handing him a ban from all representative cricket for three years after he pleaded guilty of failing to report det… [+1506 chars]"
-      },
-      {
-          "source": {
-              "id": "espn-cric-info",
-              "name": "ESPN Cric Info"
-          },
-          "author": null,
-          "title": "What we learned from watching the 1992 World Cup final in full again | ESPNcricinfo.com",
-          "description": "Wides, lbw calls, swing - plenty of things were different in white-ball cricket back then | ESPNcricinfo.com",
-          "url": "http://www.espncricinfo.com/story/_/id/28970907/learned-watching-1992-world-cup-final-full-again",
-          "urlToImage": "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1219926_1296x729.jpg",
-          "publishedAt": "2020-03-30T15:26:05Z",
-          "content": "Last week, we at ESPNcricinfo did something we have been thinking of doing for eight years now: pretend-live ball-by-ball commentary for a classic cricket match. We knew the result, yes, but we tried… [+6823 chars]"
-      },
-      {
-        "source": {
-            "id": "espn-cric-info",
-            "name": "ESPN Cric Info"
-        },
-        "author": null,
-        "title": "What we learned from watching the 1992 World Cup final in full again | ESPNcricinfo.com",
-        "description": "Wides, lbw calls, swing - plenty of things were different in white-ball cricket back then | ESPNcricinfo.com",
-        "url": "http://www.espncricinfo.com/story/_/id/28970907/learned-watching-1992-world-cup-final-full-again",
-        "urlToImage": "https://a4.espncdn.com/combiner/i?img=%2Fi%2Fcricket%2Fcricinfo%2F1219926_1296x729.jpg",
-        "publishedAt": "2020-03-30T15:26:05Z",
-        "content": "Last week, we at ESPNcricinfo did something we have been thinking of doing for eight years now: pretend-live ball-by-ball commentary for a classic cricket match. We knew the result, yes, but we tried… [+6823 chars]"
-    }
-  ]
   //using constructor
   constructor(){
     super();
@@ -64,34 +10,90 @@ export class News extends Component {
     console.log("Hello I am a constructor from news Comoponent");
 
     this.state = {
-      articles : this.articles,
-      loading : false
+      articles : [],
+      loading : false,
+      page : 1
     }
   }
 
+  //component didMount run after render mthod
+  async componentDidMount() {
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=9d94f9a74353407b97d7401ff4287540&page=1&pageSize=${this.props.pageSize}`;
+    this.setState({loading: true});
+    let data = await fetch(url);
+    let parseData = await data.json();
+    this.setState({ articles: parseData.articles , 
+      totalResults : parseData.totalResults,
+      loading : false
+    })
 
+    console.log("ParsedData",parseData);
+  }
+
+  handlePreviousClick = async() => {
+    console.log("Previous");
+    if(this.state.page - 1 > Math.ceil(this.state.totalResults/this.props.pageSize)){
+
+    }else{
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=9d94f9a74353407b97d7401ff4287540&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+      this.setState({loading: true});
+      let data = await fetch(url);
+      let parseData = await data.json();
+      this.setState({
+        page : this.state.page - 1 ,
+        articles: parseData.articles,
+        loading : false
+       })
+    }
+
+    
+  }
+
+   handleNextClick = async() => {
+    console.log("Next");
+
+    //using math.ciel method which return higher integer for finding page sieze params
+    if(this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)){
+
+    }else{
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=9d94f9a74353407b97d7401ff4287540&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+      this.setState({loading: true});
+      let data = await fetch(url);
+      let parseData = await data.json();
+      this.setState({
+        page : this.state.page +1 ,
+        articles: parseData.articles,
+        loading : false
+       })
+    }
+
+  }
 
   render() {
+    console.log("Render");
     return (
       <div className='container my-3'>
-        <h2>Top Headlines</h2>
-
+        <h1 className='text-center'>News Dose: Top Headlines</h1>
+        {this.state.loading && <Spinner />}
         {/* importing the News component items 
           I want to 3 newsitem in one row
         */}
-        
-        
         <div className="row">
 
-        {/* using map on articles */}
-          {this.state.articles.map((element) => {
-            console.log(element);
+        {/* using map on articles  and if loading is true then show data else hide*/}
+          {!this.state.loading && this.state.articles.map((element) => {
+            
             return <div className="col-md-4" key={element.url}>
                     {/* Here i slice the words in limit and add ... for read more */}
-                    <NewsItem title={element.title.slice(0,45)} description={element.description.slice(0,88)} url={element.urlToImage} newsId={element.url}/>
+                    <NewsItem title={element.title?element.title.slice(0,45):""} description={element.description?element.description.slice(0,88):""} url={element.urlToImage} newsId={element.url}/>
                   </div>
           })}
 
+        </div>
+
+        <div className="container d-flex justify-content-between">
+          <button disabled={this.state.page <= 1}  type="button" className="btn btn-dark" onClick={this.handlePreviousClick}>&laquo; Previous</button>
+          <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)} type="button" className="btn btn-dark" onClick={this.handleNextClick}>Next &raquo;</button>
         </div>
         
       </div>
