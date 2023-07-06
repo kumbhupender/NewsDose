@@ -4,7 +4,7 @@ export class Navbar extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
             <div className="container-fluid">
             <a className="navbar-brand" href="/">Navbar</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="/navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,6 +17,30 @@ export class Navbar extends Component {
                 </li>
                 <li className="nav-item">
                     <a className="nav-link" href="/">About</a>
+                </li>
+
+                <li className="nav-item">
+                    <a className="nav-link" href="/">Buissness</a>
+                </li>
+
+                <li className="nav-item">
+                    <a className="nav-link" href="/">Entertainment</a>
+                </li>
+
+                <li className="nav-item">
+                    <a className="nav-link" href="/">General</a>
+                </li>
+
+                <li className="nav-item">
+                    <a className="nav-link" href="/">Health</a>
+                </li>
+
+                <li className="nav-item">
+                    <a className="nav-link" href="/">Science</a>
+                </li>
+
+                <li className="nav-item">
+                    <a className="nav-link" href="/">Technology</a>
                 </li>
                 </ul>
             </div>
