@@ -87,7 +87,7 @@ export class News extends Component {
     console.log("Render");
     return (
       <div className='container my-3'>
-        <h1 className='text-center'>News Dose: Top Headlines</h1>
+        <h1 className='text-center' style={{margin : "3 0" }}>News Dose: Top Headlines</h1>
         {this.state.loading && <Spinner />}
         {/* importing the News component items 
           I want to 3 newsitem in one row
