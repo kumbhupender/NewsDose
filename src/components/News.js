@@ -62,7 +62,7 @@ const News = (props) =>{
   
     return (
       <>
-        <h1 className="text-center" style={{ margin: "50px 0px" }}>
+        <h1 className="text-center" style={{ margin: "78px 0px" , textShadow: "-2px 3px 4px rgba(89, 87, 86, 0.48"}}>
           News Dose: Top {capitalizeFirstLetter(props.category)} Headlines
         </h1>
   
